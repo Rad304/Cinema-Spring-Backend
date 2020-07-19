@@ -12,12 +12,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service("ICinemaInitService")
 @Transactional
 public class ICinemaInitServiceImpl implements ICinemaInitService {
 
+    @Autowired private UserRepository userRepository;
     @Autowired private VilleRepository villeRepository;
     @Autowired private CinemaRepository cinemaRepository;
     @Autowired private SalleRepository salleRepository;
@@ -27,6 +29,16 @@ public class ICinemaInitServiceImpl implements ICinemaInitService {
     @Autowired private FilmRepository filmRepository;
     @Autowired private ProjectionRepository projectionRepository;
     @Autowired private TicketRepository ticketRepository;
+
+    @Override
+    public void initUsers() {
+        List<User> users = Stream.of(
+                new User((long) 1, "user1", "password", "user1@gmail.com"),
+                new User((long) 2, "user2", "123", "user2@gmail.com"),
+                new User((long) 3, "yasser", "password", "yasser@gmail.com")
+        ).collect(Collectors.toList());
+        userRepository.saveAll(users);
+    }
 
     @Override
     public void initVilles() {

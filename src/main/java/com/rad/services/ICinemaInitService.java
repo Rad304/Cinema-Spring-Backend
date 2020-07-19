@@ -1,6 +1,7 @@
 package com.rad.services;
 
 public interface ICinemaInitService {
+    public void initUsers();
     public void initVilles();
     public void initCinemas();
     public void initSalles();

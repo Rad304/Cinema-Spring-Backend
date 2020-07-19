@@ -2,11 +2,15 @@ package com.rad.web;
 
 import com.rad.dao.FilmRepository;
 import com.rad.dao.TicketRepository;
+import com.rad.entities.AuthRequest;
 import com.rad.entities.Film;
 import com.rad.entities.Ticket;
+import com.rad.util.JwtUtil;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -25,6 +29,11 @@ public class CinemaRestController {
     private FilmRepository filmRepository;
     @Autowired
     private TicketRepository ticketRepository;
+    @Autowired
+    private JwtUtil jwtUtil;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @GetMapping(path="/imagesFilm/{id}", produces= MediaType.IMAGE_JPEG_VALUE)
     public byte[] image(@PathVariable(name="id") Long id) throws IOException {
         Film f = filmRepository.findById(id).get();
@@ -45,6 +54,18 @@ public class CinemaRestController {
             listTickets.add(ticket);
         });
         return listTickets;
+    }
+
+    @PostMapping("/authenticate")
+    public String generateToken(@RequestBody AuthRequest authRequest) throws Exception {
+        try{
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword())
+            );
+        }catch (Exception e){
+            throw new Exception("Invalid username or password");
+        }
+        return jwtUtil.generateToken(authRequest.getUserName());
     }
 }
 @Data

@@ -26,6 +26,7 @@ public class CinemasApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         restConfiguration.exposeIdsFor(Film.class, Salle.class, Ticket.class);
+        cinemaInitService.initUsers();
         cinemaInitService.initVilles();
         cinemaInitService.initCinemas();
         cinemaInitService.initSalles();
