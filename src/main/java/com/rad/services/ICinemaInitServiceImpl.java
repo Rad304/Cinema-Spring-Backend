@@ -40,7 +40,7 @@ public class ICinemaInitServiceImpl implements ICinemaInitService {
     @Override
     public void initCinemas() {
         villeRepository.findAll().forEach(ville -> {
-            Stream.of("MegaRama", "IMAX", "FOUNOUN", "CHAHRAZAD", "DAOULIZ").forEach(nomCinema -> {
+            Stream.of("MegaRama", "IMAX", "FOUNOUN", "RIALTO", "LYNX").forEach(nomCinema -> {
                 Cinema cinema = new Cinema();
                 cinema.setName(nomCinema);
                 cinema.setNombreSalles(3 + (int)(Math.random()*7));
@@ -102,7 +102,7 @@ public class ICinemaInitServiceImpl implements ICinemaInitService {
     public void initFilms() {
         double[] durees = new double[]{1,1.5,2,2.5,3};
         List<Categorie> categories = categoryRepository.findAll();
-        Stream.of("12 Hommes en colere", "Forest Gump", "Green Book", "La ligne verte", "Le Parrain", "Le Signeur des anneaux").forEach(titreFilm -> {
+        Stream.of("Interstellar", "Jumanji", "Django Unchained", "Inception", "The Godfather", "The Matrix", "The Dark Knight", "The Good The Bad The Ugly", "Psycho", "Joker").forEach(titreFilm -> {
             Film film = new Film();
             film.setTitre(titreFilm);
             film.setDuree(durees[new Random().nextInt(durees.length)]);
