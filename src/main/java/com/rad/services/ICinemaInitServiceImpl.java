@@ -33,9 +33,9 @@ public class ICinemaInitServiceImpl implements ICinemaInitService {
     @Override
     public void initUsers() {
         List<User> users = Stream.of(
-                new User((long) 1, "user1", "password", "user1@gmail.com"),
-                new User((long) 2, "user2", "123", "user2@gmail.com"),
-                new User((long) 3, "yasser", "password", "yasser@gmail.com")
+                new User((long) 1, "user1", "password", "user1@gmail.com", "user"),
+                new User((long) 2, "user2", "123", "user2@gmail.com", "user"),
+                new User((long) 3, "yasser", "password", "yasser@gmail.com", "admin")
         ).collect(Collectors.toList());
         userRepository.saveAll(users);
     }
@@ -52,7 +52,7 @@ public class ICinemaInitServiceImpl implements ICinemaInitService {
     @Override
     public void initCinemas() {
         villeRepository.findAll().forEach(ville -> {
-            Stream.of("MegaRama", "IMAX", "FOUNOUN", "CHAHRAZAD", "DAOULIZ").forEach(nomCinema -> {
+            Stream.of("MegaRama", "IMAX", "FOUNOUN", "RIALTO", "LYNX").forEach(nomCinema -> {
                 Cinema cinema = new Cinema();
                 cinema.setName(nomCinema);
                 cinema.setNombreSalles(3 + (int)(Math.random()*7));
@@ -114,7 +114,7 @@ public class ICinemaInitServiceImpl implements ICinemaInitService {
     public void initFilms() {
         double[] durees = new double[]{1,1.5,2,2.5,3};
         List<Categorie> categories = categoryRepository.findAll();
-        Stream.of("12 Hommes en colere", "Forest Gump", "Green Book", "La ligne verte", "Le Parrain", "Le Signeur des anneaux").forEach(titreFilm -> {
+        Stream.of("Interstellar", "Jumanji", "Django Unchained", "Inception", "The Godfather", "The Matrix", "The Dark Knight", "The Good The Bad The Ugly", "Psycho", "Joker").forEach(titreFilm -> {
             Film film = new Film();
             film.setTitre(titreFilm);
             film.setDuree(durees[new Random().nextInt(durees.length)]);

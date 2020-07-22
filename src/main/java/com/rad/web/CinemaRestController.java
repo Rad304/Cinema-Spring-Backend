@@ -2,9 +2,11 @@ package com.rad.web;
 
 import com.rad.dao.FilmRepository;
 import com.rad.dao.TicketRepository;
+import com.rad.dao.UserRepository;
 import com.rad.entities.AuthRequest;
 import com.rad.entities.Film;
 import com.rad.entities.Ticket;
+import com.rad.entities.User;
 import com.rad.util.JwtUtil;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -33,6 +36,8 @@ public class CinemaRestController {
     private JwtUtil jwtUtil;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping(path="/imagesFilm/{id}", produces= MediaType.IMAGE_JPEG_VALUE)
     public byte[] image(@PathVariable(name="id") Long id) throws IOException {
@@ -57,7 +62,7 @@ public class CinemaRestController {
     }
 
     @PostMapping("/authenticate")
-    public String generateToken(@RequestBody AuthRequest authRequest) throws Exception {
+    public HashMap<String, Object> generateToken(@RequestBody AuthRequest authRequest) throws Exception {
         try{
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword())
@@ -65,7 +70,15 @@ public class CinemaRestController {
         }catch (Exception e){
             throw new Exception("Invalid username or password");
         }
-        return jwtUtil.generateToken(authRequest.getUserName());
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("access_token", jwtUtil.generateToken(authRequest.getUserName()));
+        map.put("user", userRepository.findByUsername(authRequest.getUserName()));
+        return map;
+    }
+
+    @PostMapping("/register")
+    public User Registration(@RequestBody User user) throws Exception {
+        return userRepository.save(user);
     }
 }
 @Data

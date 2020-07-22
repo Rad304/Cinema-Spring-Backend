@@ -1,9 +1,7 @@
 package com.rad;
 
 
-import com.rad.entities.Film;
-import com.rad.entities.Salle;
-import com.rad.entities.Ticket;
+import com.rad.entities.*;
 import com.rad.services.ICinemaInitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -25,7 +23,7 @@ public class CinemasApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        restConfiguration.exposeIdsFor(Film.class, Salle.class, Ticket.class);
+        restConfiguration.exposeIdsFor(Film.class, Salle.class, Ticket.class, Cinema.class, Ville.class, Categorie.class);
         cinemaInitService.initUsers();
         cinemaInitService.initVilles();
         cinemaInitService.initCinemas();
